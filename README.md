@@ -66,6 +66,26 @@ Where:
 - Training FLOPs ≥ 10²⁵ (EU AI Act systemic risk threshold)
 - Capability flags: `self-replication`, `cbrn`, `autonomous_weapons`
 
+## UART Tier Classification
+
+| Tier | Name | Score Range | Description |
+|------|------|-------------|-------------|
+| 0 | Passive | R = 0 | Minimal Risk |
+| 1 | Assistive | 0 < R < 5 | Low Risk |
+| 2 | Bounded | 5 ≤ R < 20 | Moderate Risk |
+| 3 | High-Agency | 20 ≤ R < 50 | High Risk |
+| 4 | Systemic | R ≥ 50 OR overrides | Critical Risk |
+
+**Note on Tier Thresholds:** These tier threshold values (0, 5, 20, 50) are for illustration purposes. A calibration process with domain experts would refine these numbers based on empirical risk data, regulatory requirements, and policy alignment across jurisdictions (EU AI Act, U.S. NIST/NTIA guidance, U.S. AI Bill/Senate Bill 53 in California, etc.). The UART scheme is meant to be a harmonized framework – meaning that whether an AI is assessed by an EU regulator, a U.S. regulator (like under forthcoming NIST/NTIA guidance), or an internal safety team, the tier outcome should converge if they use the same ABOM and scoring criteria.
+
+**Automatic Tier 4 Overrides:**
+- Training FLOPs ≥ 10²⁵ (EU AI Act systemic risk threshold)
+- Capability flags: `self-replication`, `cbrn`, `autonomous_weapons`
+
+**Additional Tier Upgrade Rules (Documented for Future Implementation):**
+- **HOOTL Autonomy:** Systems with HOOTL (Human-Out-Of-The-Loop) autonomy should force a minimum Tier 3 classification regardless of calculated R from other factors, as this represents inherently high-risk autonomy.
+- **Self-Replication:** Any agent with self-replication capability should be classified as Tier 4 regardless of calculated R, as this is an inherently systemic-risk capability identified in frontier AI policies.
+
 ## Installation
 
 ### Prerequisites
