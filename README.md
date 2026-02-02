@@ -15,16 +15,21 @@ The ABOM Risk Scoring Engine helps address this gap by assessing the internal ar
 ## Features
 
 - Parse and validate ABOM.json manifests
-- Compute Risk Score using the formula: R = A × U × exp(P)
+- Compute Risk Score using the formula: R = A × U × exp(P) × scaffolding_modifier
 - Map scores to UART Tier levels (0–4)
+- Automatic Tier 4 override for FLOPs ≥ 10²⁵ or dangerous capability flags
 - Return structured output with explanation of each factor
 - Designed as a proof-of-concept aligned with the EU AI Act
 - Drag-and-drop or file picker to upload `ABOM.json`
 - Real-time risk score computation and UART tier display
 - Robust JSON validation with user-friendly error messages
-- Clean, academic-style layout (light background, black text)
+- Clean, academic-style layout inspired by LessWrong
 - Responsive design for small screens
 - Download comprehensive risk assessment report (JSON)
+
+## 📖 Tutorial
+
+**New to the tool?** See the step-by-step [User Tutorial](tutorial.md) with screenshots.
 
 ## Architecture
 
@@ -38,21 +43,28 @@ The ABOM Risk Scoring Engine helps address this gap by assessing the internal ar
 The risk score is calculated using:
 
 ```
-R = A × U × e^P
+R = A × U × e^P × scaffolding_modifier
 ```
 
 Where:
-- **A (Agency):** 1 = No tools, 2 = Read-only tools, 4 = State-changing tools
+- **A (Agency):** 1 = No tools, 2 = Read-only tools, 4 = State-changing tools, 6 = Critical capabilities
 - **U (Autonomy):** 1 = HITL, 2 = HOTL, 3 = HOOTL
 - **P (Persistence):** 0 = None/ephemeral, 1 = Session-only, 2 = Cross-session/long-term
+- **scaffolding_modifier:** 0.7–1.0 based on safety controls (MCP, sandboxing, circuit breakers)
 
 ## UART Tier Classification
 
-- **Tier 0:** R < 10 (Minimal Risk)
-- **Tier 1:** 10 ≤ R < 25 (Low Risk)
-- **Tier 2:** 25 ≤ R < 50 (Moderate Risk)
-- **Tier 3:** 50 ≤ R < 100 (High Risk)
-- **Tier 4:** R ≥ 100 (Critical Risk)
+| Tier | Name | Score Range | Description |
+|------|------|-------------|-------------|
+| 0 | Passive | R = 0 | Minimal Risk |
+| 1 | Assistive | 0 < R < 5 | Low Risk |
+| 2 | Bounded | 5 ≤ R < 20 | Moderate Risk |
+| 3 | High-Agency | 20 ≤ R < 50 | High Risk |
+| 4 | Systemic | R ≥ 50 OR overrides | Critical Risk |
+
+**Automatic Tier 4 Overrides:**
+- Training FLOPs ≥ 10²⁵ (EU AI Act systemic risk threshold)
+- Capability flags: `self-replication`, `cbrn`, `autonomous_weapons`
 
 ## Installation
 

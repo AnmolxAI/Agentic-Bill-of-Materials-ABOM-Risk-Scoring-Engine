@@ -1,0 +1,40 @@
+{
+    "model_core": {
+        "architecture": "Transformer",
+        "parameters": "2.0e12",
+        "training_flops": "5.0e25"
+    },
+    "agency_profile": {
+        "tools": [
+            {
+                "name": "Database",
+                "permission": "write"
+            },
+            {
+                "name": "Network",
+                "permission": "write"
+            },
+            {
+                "name": "System",
+                "permission": "exec"
+            }
+        ],
+        "capability_flags": [
+            "self-replication",
+            "autonomous_replication"
+        ],
+        "scope": "critical"
+    },
+    "autonomy_leash": {
+        "mode": "HOOTL"
+    },
+    "persistence_layer": {
+        "memory_type": "vector-db",
+        "retention": "permanent"
+    },
+    "scaffolding_inventory": {
+        "mcp_used": false,
+        "sandboxed": false,
+        "sandbox_type": "none"
+    }
+}

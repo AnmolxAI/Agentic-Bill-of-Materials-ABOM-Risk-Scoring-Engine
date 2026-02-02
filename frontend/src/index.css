@@ -1,13 +1,152 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Merriweather:wght@400;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+:root {
+  /* LessWrong-inspired palette */
+  --color-bg: #f9f8f4;
+  --color-bg-card: #ffffff;
+  --color-bg-subtle: #f3f1eb;
+  --color-text-primary: #2d2d2d;
+  --color-text-secondary: #6b6b6b;
+  --color-text-muted: #9a9a9a;
+  --color-border: #e8e5dc;
+  --color-border-strong: #d4d0c4;
+  
+  /* Accent colors */
+  --color-accent: #5f9b65;
+  --color-accent-hover: #4a8550;
+  
+  /* Tier semantic colors */
+  --tier-0: #5f9b65;
+  --tier-0-bg: #eef6ef;
+  --tier-1: #4a9b9b;
+  --tier-1-bg: #eef6f6;
+  --tier-2: #d4a84f;
+  --tier-2-bg: #faf5eb;
+  --tier-3: #c75d5d;
+  --tier-3-bg: #faeaea;
+  --tier-4: #8b3a3a;
+  --tier-4-bg: #f5e6e6;
+  
+  /* Typography */
+  --font-heading: 'Merriweather', serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
 }
 
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--color-text-primary);
+}
+
+/* Card styling */
+.card {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: box-shadow 0.2s ease;
+}
+
+.card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+/* Tier badges */
+.tier-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+.tier-0 { background: var(--tier-0-bg); color: var(--tier-0); border: 1px solid var(--tier-0); }
+.tier-1 { background: var(--tier-1-bg); color: var(--tier-1); border: 1px solid var(--tier-1); }
+.tier-2 { background: var(--tier-2-bg); color: var(--tier-2); border: 1px solid var(--tier-2); }
+.tier-3 { background: var(--tier-3-bg); color: var(--tier-3); border: 1px solid var(--tier-3); }
+.tier-4 { background: var(--tier-4-bg); color: var(--tier-4); border: 1px solid var(--tier-4); }
+
+/* Score display */
+.score-large {
+  font-family: var(--font-mono);
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* Subtle animations */
+.fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Button styling */
+.btn-primary {
+  background: var(--color-accent);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-family: var(--font-body);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.btn-primary:hover {
+  background: var(--color-accent-hover);
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+/* Warning banner */
+.warning-banner {
+  background: var(--tier-4-bg);
+  border: 1px solid var(--tier-4);
+  border-left: 4px solid var(--tier-4);
+  border-radius: 4px;
+  padding: 12px 16px;
+  color: var(--tier-4);
+}
+
+/* Formula display */
+.formula-box {
+  background: var(--color-bg-subtle);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  padding: 16px;
+  font-family: var(--font-mono);
+}
+
+/* Monospace numbers */
+.mono {
+  font-family: var(--font-mono);
+}

@@ -34,48 +34,65 @@ function FileUpload({ onFileUpload, loading }) {
 
   return (
     <div>
-      <label className="block text-sm font-medium text-gray-700 mb-2">
-        Upload ABOM.json File
-      </label>
+      <h2 className="text-xl mb-4" style={{ fontFamily: 'var(--font-heading)' }}>
+        Upload ABOM Configuration
+      </h2>
       <div
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
-        className={`
-          border-2 border-dashed rounded-lg p-8 text-center transition-colors
-          ${isDragging
-            ? 'border-blue-500 bg-blue-50'
-            : 'border-gray-300 hover:border-gray-400'
-          }
-          ${loading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
-        `}
+        style={{
+          border: `2px dashed ${isDragging ? 'var(--color-accent)' : 'var(--color-border-strong)'}`,
+          backgroundColor: isDragging ? 'var(--tier-0-bg)' : 'var(--color-bg-subtle)',
+          borderRadius: '8px',
+          padding: '2.5rem',
+          textAlign: 'center',
+          transition: 'all 0.2s ease',
+          cursor: loading ? 'not-allowed' : 'pointer',
+          opacity: loading ? 0.6 : 1,
+        }}
       >
         {loading ? (
           <div className="flex flex-col items-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mb-2"></div>
-            <p className="text-gray-600">Processing...</p>
+            <div
+              className="animate-spin rounded-full h-10 w-10 mb-3"
+              style={{ border: '3px solid var(--color-border)', borderTopColor: 'var(--color-accent)' }}
+            />
+            <p style={{ color: 'var(--color-text-secondary)' }}>Analyzing ABOM...</p>
           </div>
         ) : (
           <>
-            <svg
-              className="mx-auto h-12 w-12 text-gray-400"
-              stroke="currentColor"
-              fill="none"
-              viewBox="0 0 48 48"
+            <div
+              className="mx-auto mb-4 flex items-center justify-center"
+              style={{
+                width: '64px',
+                height: '64px',
+                backgroundColor: 'var(--tier-0-bg)',
+                borderRadius: '50%'
+              }}
             >
-              <path
-                d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                strokeWidth={2}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            <div className="mt-4">
+              <svg
+                className="h-8 w-8"
+                style={{ color: 'var(--color-accent)' }}
+                stroke="currentColor"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1.5}
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
+            </div>
+            <div>
               <label
                 htmlFor="file-upload"
-                className="cursor-pointer inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                className="btn-primary"
+                style={{ display: 'inline-block', cursor: 'pointer' }}
               >
-                <span>Select a file</span>
+                Select ABOM.json
                 <input
                   id="file-upload"
                   name="file-upload"
@@ -86,12 +103,12 @@ function FileUpload({ onFileUpload, loading }) {
                   disabled={loading}
                 />
               </label>
-              <p className="mt-2 text-sm text-gray-600">
-                or drag and drop
+              <p className="mt-3 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+                or drag and drop your file here
               </p>
             </div>
-            <p className="mt-2 text-xs text-gray-500">
-              JSON files only
+            <p className="mt-2 text-xs" style={{ color: 'var(--color-text-muted)' }}>
+              Accepts JSON files following the ABOM schema
             </p>
           </>
         )}
@@ -101,4 +118,3 @@ function FileUpload({ onFileUpload, loading }) {
 }
 
 export default FileUpload
-

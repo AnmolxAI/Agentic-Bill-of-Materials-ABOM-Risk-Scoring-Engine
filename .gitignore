@@ -36,5 +36,8 @@ Thumbs.db
 
 # Environment variables
 .env
-.env.local
 
+# Documents
+*.pdf
+*.md
+!README.md

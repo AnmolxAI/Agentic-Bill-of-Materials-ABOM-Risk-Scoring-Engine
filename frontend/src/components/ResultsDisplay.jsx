@@ -1,24 +1,15 @@
 function ResultsDisplay({ result, onDownloadReport }) {
-  const getTierColor = (tier) => {
-    const colors = {
-      0: 'bg-green-100 text-green-800 border-green-300',
-      1: 'bg-yellow-100 text-yellow-800 border-yellow-300',
-      2: 'bg-orange-100 text-orange-800 border-orange-300',
-      3: 'bg-red-100 text-red-800 border-red-300',
-      4: 'bg-red-200 text-red-900 border-red-400',
-    }
-    return colors[tier] || 'bg-gray-100 text-gray-800 border-gray-300'
-  }
+  const getTierClass = (tier) => `tier-${tier}`
 
-  const getTierDescription = (tier) => {
-    const descriptions = {
-      0: 'Minimal Risk',
-      1: 'Low Risk',
-      2: 'Moderate Risk',
-      3: 'High Risk',
-      4: 'Critical Risk',
+  const getTierName = (tier) => {
+    const names = {
+      0: 'Passive',
+      1: 'Assistive',
+      2: 'Bounded',
+      3: 'High-Agency',
+      4: 'Systemic',
     }
-    return descriptions[tier] || 'Unknown'
+    return names[tier] || 'Unknown'
   }
 
   const getAgencyLabel = (agency) => {
@@ -26,102 +17,143 @@ function ResultsDisplay({ result, onDownloadReport }) {
       1: 'No tools',
       2: 'Read-only tools',
       4: 'State-changing tools',
+      6: 'Critical/Dangerous capabilities',
     }
-    return labels[agency] || 'Unknown'
+    return labels[agency] || `Score: ${agency}`
   }
 
   const getAutonomyLabel = (autonomy) => {
     const labels = {
-      1: 'HITL (Human-In-The-Loop)',
-      2: 'HOTL (Human-On-The-Loop)',
-      3: 'HOOTL (Human-Out-Of-The-Loop)',
+      1: 'HITL — Human-In-The-Loop',
+      2: 'HOTL — Human-On-The-Loop',
+      3: 'HOOTL — Human-Out-Of-The-Loop',
     }
-    return labels[autonomy] || 'Unknown'
+    return labels[autonomy] || `Score: ${autonomy}`
   }
 
   const getPersistenceLabel = (persistence) => {
     const labels = {
-      0: 'None or ephemeral',
-      1: 'Session-only',
-      2: 'Cross-session or long-term',
+      0: 'Ephemeral — No memory',
+      1: 'Session — Temporary state',
+      2: 'Long-term — Cross-session memory',
     }
-    return labels[persistence] || 'Unknown'
+    return labels[persistence] || `Score: ${persistence}`
   }
 
+  const hasOverrides = result.tier_4_overrides && result.tier_4_overrides.length > 0
+
   return (
-    <div>
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">Risk Assessment Results</h2>
+    <div className="fade-in">
+      <h2 className="text-2xl mb-6" style={{ fontFamily: 'var(--font-heading)' }}>
+        Risk Assessment Results
+      </h2>
+
+      {/* Tier 4 Override Warning */}
+      {hasOverrides && (
+        <div className="warning-banner mb-6">
+          <p className="font-semibold mb-2">⚠ Tier 4 Override Triggered</p>
+          <ul className="text-sm" style={{ paddingLeft: '1.25rem', listStyle: 'disc' }}>
+            {result.tier_4_overrides.map((reason, idx) => (
+              <li key={idx}>{reason}</li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       {/* Main Score Display */}
-      <div className="mb-6">
-        <div className={`rounded-lg border-2 p-6 ${getTierColor(result.tier)}`}>
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium opacity-75">Risk Score</p>
-              <p className="text-4xl font-bold mt-1">{result.score}</p>
-            </div>
-            <div className="text-right">
-              <p className="text-sm font-medium opacity-75">UART Tier</p>
-              <p className="text-4xl font-bold mt-1">Tier {result.tier}</p>
-              <p className="text-sm mt-1 opacity-75">{getTierDescription(result.tier)}</p>
-            </div>
-          </div>
+      <div
+        className={`tier-badge ${getTierClass(result.tier)} mb-6`}
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          padding: '1.5rem',
+          borderRadius: '8px',
+        }}
+      >
+        <div>
+          <p className="text-sm opacity-75 mb-1">Risk Score</p>
+          <p className="score-large">{result.score}</p>
+        </div>
+        <div style={{ textAlign: 'right' }}>
+          <p className="text-sm opacity-75 mb-1">UART Tier</p>
+          <p className="score-large">{result.tier}</p>
+          <p className="text-sm mt-1" style={{ opacity: 0.8 }}>{getTierName(result.tier)}</p>
         </div>
       </div>
 
-      {/* Field Breakdown */}
+      {/* A-U-P Breakdown */}
       <div className="mb-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Field Breakdown</h3>
+        <h3 className="text-lg mb-4" style={{ fontFamily: 'var(--font-heading)' }}>
+          Score Components
+        </h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-            <p className="text-sm font-medium text-gray-600 mb-1">Agency (A)</p>
-            <p className="text-2xl font-bold text-gray-900">{result.agency}</p>
-            <p className="text-xs text-gray-500 mt-1">{getAgencyLabel(result.agency)}</p>
-          </div>
-          <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-            <p className="text-sm font-medium text-gray-600 mb-1">Autonomy (U)</p>
-            <p className="text-2xl font-bold text-gray-900">{result.autonomy}</p>
-            <p className="text-xs text-gray-500 mt-1">{getAutonomyLabel(result.autonomy)}</p>
-          </div>
-          <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-            <p className="text-sm font-medium text-gray-600 mb-1">Persistence (P)</p>
-            <p className="text-2xl font-bold text-gray-900">{result.persistence}</p>
-            <p className="text-xs text-gray-500 mt-1">{getPersistenceLabel(result.persistence)}</p>
-          </div>
+          <ScoreCard
+            label="Agency (A)"
+            value={result.agency}
+            description={getAgencyLabel(result.agency)}
+          />
+          <ScoreCard
+            label="Autonomy (U)"
+            value={result.autonomy}
+            description={getAutonomyLabel(result.autonomy)}
+          />
+          <ScoreCard
+            label="Persistence (P)"
+            value={result.persistence}
+            description={getPersistenceLabel(result.persistence)}
+          />
         </div>
       </div>
 
-      {/* Formula Display */}
-      <div className="mb-6 bg-blue-50 rounded-lg p-4 border border-blue-200">
-        <p className="text-sm font-medium text-blue-900 mb-1">Risk Score Formula</p>
-        <p className="text-lg font-mono text-blue-800">
-          R = A × U × e<sup>P</sup>
-        </p>
-        <p className="text-xs text-blue-700 mt-2">
-          Calculated: {result.agency} × {result.autonomy} × e<sup>{result.persistence}</sup> = {result.score}
-        </p>
-      </div>
+      {/* Scaffolding Modifier */}
+      {result.scaffolding_modifier !== undefined && result.scaffolding_modifier !== 1.0 && (
+        <div className="mb-6">
+          <div
+            className="p-4 rounded-lg"
+            style={{
+              backgroundColor: 'var(--tier-0-bg)',
+              border: '1px solid var(--tier-0)'
+            }}
+          >
+            <div className="flex justify-between items-center">
+              <div>
+                <p className="font-medium" style={{ color: 'var(--tier-0)' }}>
+                  Scaffolding Modifier Applied
+                </p>
+                <p className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+                  Safety controls reduce risk by {Math.round((1 - result.scaffolding_modifier) * 100)}%
+                </p>
+              </div>
+              <p className="mono text-2xl font-bold" style={{ color: 'var(--tier-0)' }}>
+                ×{result.scaffolding_modifier}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
-      {/* JSON Output */}
-      <div className="mb-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">Result Data</h3>
-        <pre className="bg-gray-900 text-green-400 p-4 rounded-lg overflow-x-auto text-sm">
-          {JSON.stringify(result, null, 2)}
-        </pre>
+      {/* Formula */}
+      <div className="formula-box mb-6">
+        <p className="text-sm mb-2" style={{ color: 'var(--color-text-secondary)', fontFamily: 'var(--font-body)' }}>
+          Risk Score Formula
+        </p>
+        <p className="text-lg">
+          R = A × U × e<sup>P</sup>{result.scaffolding_modifier !== 1.0 ? ' × modifier' : ''}
+        </p>
+        <p className="text-sm mt-2" style={{ color: 'var(--color-text-muted)' }}>
+          {result.agency} × {result.autonomy} × e<sup>{result.persistence}</sup>
+          {result.scaffolding_modifier !== 1.0 ? ` × ${result.scaffolding_modifier}` : ''} = {result.score}
+        </p>
       </div>
 
       {/* Download Button */}
       <div className="flex justify-center">
         <button
           onClick={onDownloadReport}
-          className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+          className="btn-primary flex items-center gap-2"
         >
-          <svg
-            className="w-5 h-5 mr-2"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -129,12 +161,33 @@ function ResultsDisplay({ result, onDownloadReport }) {
               d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
             />
           </svg>
-          Download Report (JSON)
+          Download Full Report
         </button>
       </div>
     </div>
   )
 }
 
-export default ResultsDisplay
+function ScoreCard({ label, value, description }) {
+  return (
+    <div
+      className="p-4 rounded-lg"
+      style={{
+        backgroundColor: 'var(--color-bg-subtle)',
+        border: '1px solid var(--color-border)'
+      }}
+    >
+      <p className="text-sm mb-1" style={{ color: 'var(--color-text-secondary)' }}>
+        {label}
+      </p>
+      <p className="mono text-3xl font-bold mb-1" style={{ color: 'var(--color-text-primary)' }}>
+        {value}
+      </p>
+      <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
+        {description}
+      </p>
+    </div>
+  )
+}
 
+export default ResultsDisplay

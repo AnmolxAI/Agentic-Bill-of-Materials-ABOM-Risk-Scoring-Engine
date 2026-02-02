@@ -13,44 +13,54 @@ BASE_URL = "http://localhost:8000"
 TEST_DIR = Path(__file__).parent
 
 # Expected results for each test case
+# Note: Scaffolding modifiers can reduce scores by up to 30%
+# FLOPs >= 1e25 automatically triggers Tier 4 override
+# Tier thresholds per paper: Tier 0 (R=0), Tier 1 (0<R<5), Tier 2 (5≤R<20), Tier 3 (20≤R<50), Tier 4 (R≥50)
 EXPECTED_RESULTS = {
     "test_case_1_minimal_risk.json": {
         "agency": 1,
         "autonomy": 1,
         "persistence": 0,
-        "tier": 0,
-        "score_range": (0, 10)  # R = 1 × 1 × e^0 = 1
+        "tier": 1,  # R = 1 × 1 × e^0 × 0.85 = 0.85 → Tier 1 (0 < R < 5)
+        "score_range": (0, 5)
     },
     "test_case_2_low_risk.json": {
         "agency": 2,
         "autonomy": 2,
         "persistence": 1,
-        "tier": 1,
-        "score_range": (10, 25)  # R = 2 × 2 × e^1 ≈ 10.87
+        "tier": 2,  # R = 2 × 2 × e^1 × 0.765 ≈ 8.32 → Tier 2 (5 ≤ R < 20)
+        "score_range": (5, 20)
     },
     "test_case_3_moderate_risk.json": {
         "agency": 4,
         "autonomy": 3,
         "persistence": 1,
-        "tier": 2,
-        "score_range": (25, 50)  # R = 4 × 3 × e^1 = 12 × 2.718 ≈ 32.6
+        "tier": 3,  # R = 4 × 3 × e^1 × 0.765 ≈ 24.95 → Tier 3 (20 ≤ R < 50)
+        "score_range": (20, 50)
     },
     "test_case_4_high_risk.json": {
         "agency": 4,
         "autonomy": 3,
         "persistence": 2,
-        "tier": 3,
-        "score_range": (50, 100)  # R = 4 × 3 × e^2 ≈ 88.6
+        "tier": 4,  # FLOPs (1.1e25) triggers Tier 4 override
+        "score_range": (50, 100),  # R = 4 × 3 × e^2 × 0.765 ≈ 67.83
+        "expect_tier_4_override": True
     },
     "test_case_5_critical_risk.json": {
         "agency": 4,
         "autonomy": 3,
         "persistence": 2,
-        "tier": 3,
-        "score_range": (50, 100)  # R = 4 × 3 × e^2 = 12 × 7.389 ≈ 88.6
-        # Note: With current formula max values (A=4, U=3, P=2), max score is ~88.6
-        # Tier 4 (R ≥ 100) is not achievable with current scoring system
-        # This test case represents the highest risk scenario possible
+        "tier": 4,  # FLOPs (2.0e25) triggers Tier 4 override
+        "score_range": (50, 100),  # R = 4 × 3 × e^2 × 0.9 ≈ 79.8
+        "expect_tier_4_override": True
+    },
+    "test_case_6_tier4_override.json": {
+        "agency": 6,  # Critical capability (self-replication)
+        "autonomy": 3,
+        "persistence": 2,
+        "tier": 4,  # FLOPs >= 1e25 AND capability flags trigger Tier 4
+        "score_range": (100, 200),  # R = 6 × 3 × e^2 × 1.0 ≈ 133.0 (no scaffolding reduction)
+        "expect_tier_4_override": True
     }
 }
 

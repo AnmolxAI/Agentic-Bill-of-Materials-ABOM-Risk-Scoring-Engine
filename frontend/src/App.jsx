@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import FileUpload from './components/FileUpload'
 import ResultsDisplay from './components/ResultsDisplay'
+import HowItWorks from './components/HowItWorks'
 
 function App() {
   const [result, setResult] = useState(null)
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
-  const [abomData, setAbomData] = useState(null)
   const [uploadedFile, setUploadedFile] = useState(null)
 
   const handleFileUpload = async (file) => {
@@ -30,13 +30,7 @@ function App() {
 
       const data = await response.json()
       setResult(data)
-
-      // Store the file for download report
       setUploadedFile(file)
-      
-      // Also read the file to display it
-      const fileContent = await file.text()
-      setAbomData(JSON.parse(fileContent))
     } catch (err) {
       setError(err.message)
     } finally {
@@ -79,43 +73,62 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
-      <div className="max-w-4xl mx-auto">
-        <header className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
+    <div className="min-h-screen py-12 px-4" style={{ backgroundColor: 'var(--color-bg)' }}>
+      <div className="max-w-3xl mx-auto">
+        {/* Header */}
+        <header className="text-center mb-10">
+          <h1 className="text-3xl md:text-4xl mb-3" style={{ fontFamily: 'var(--font-heading)' }}>
             ABOM Risk Scoring Engine
           </h1>
-          <p className="text-gray-600">
-            Upload an ABOM.json file to calculate risk score and UART tier classification
+          <p className="text-lg" style={{ color: 'var(--color-text-secondary)' }}>
+            Unified Agentic Risk Tiering for AI Governance
+          </p>
+          <p className="text-sm mt-2" style={{ color: 'var(--color-text-muted)' }}>
+            Upload an ABOM.json to calculate risk score and UART tier classification
           </p>
         </header>
 
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+        {/* Upload Card */}
+        <div className="card p-6 mb-6 fade-in">
           <FileUpload
             onFileUpload={handleFileUpload}
             loading={loading}
           />
         </div>
 
+        {/* How It Works - expandable documentation */}
+        <HowItWorks />
+
+        {/* Error Display */}
         {error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-            <p className="text-red-800 font-medium">Error</p>
-            <p className="text-red-600 text-sm mt-1">{error}</p>
+          <div className="warning-banner mb-6 fade-in">
+            <p className="font-semibold mb-1">Error</p>
+            <p className="text-sm">{error}</p>
           </div>
         )}
 
+        {/* Results */}
         {result && (
-          <div className="bg-white rounded-lg shadow-md p-6">
+          <div className="card p-6 fade-in">
             <ResultsDisplay
               result={result}
               onDownloadReport={handleDownloadReport}
             />
           </div>
         )}
+
+        {/* Footer */}
+        <footer className="text-center mt-10 pt-6" style={{ borderTop: '1px solid var(--color-border)' }}>
+          <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
+            Based on "Technical AI Governance via an Agentic Bill of Materials and Risk Tiering"
+          </p>
+          <p className="text-xs mt-1" style={{ color: 'var(--color-text-muted)' }}>
+            Risk Formula: R = A × U × e<sup>P</sup> × scaffolding_modifier
+          </p>
+        </footer>
       </div>
     </div>
   )
 }
 
 export default App
-
