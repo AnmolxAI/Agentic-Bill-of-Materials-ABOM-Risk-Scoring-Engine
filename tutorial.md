@@ -95,6 +95,7 @@ The results show:
 | 4 | Systemic | Critical | Infrastructure-critical or extreme capabilities |
 
 ---
+**Note:** The tier thresholds (R = 0, 0 < R < 5, 5 ≤ R < 20, 20 ≤ R < 50, R ≥ 50) are for illustration purposes. A calibration process with domain experts would refine these numbers. Additionally, certain conditions force tier upgrades: HOOTL autonomy forces minimum Tier 3, and self-replication capability forces Tier 4 regardless of calculated R.
 
 ## Tier 4 Overrides
 
