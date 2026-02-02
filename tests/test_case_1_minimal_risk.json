@@ -1,0 +1,21 @@
+{
+  "model_core": {
+    "architecture": "Transformer",
+    "flops": 1.0e20
+  },
+  "agency_profile": {
+    "tools": []
+  },
+  "autonomy_leash": {
+    "mode": "HITL"
+  },
+  "persistence_layer": {
+    "memory_type": "none",
+    "retention": "ephemeral"
+  },
+  "scaffolding_inventory": {
+    "mcp_used": false,
+    "sandbox_type": "ephemeral"
+  }
+}
+

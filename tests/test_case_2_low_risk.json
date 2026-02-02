@@ -1,0 +1,24 @@
+{
+  "model_core": {
+    "architecture": "Transformer",
+    "flops": 5.0e21
+  },
+  "agency_profile": {
+    "tools": [
+      {"name": "Search", "permission": "read"},
+      {"name": "ReadFile", "permission": "read"}
+    ]
+  },
+  "autonomy_leash": {
+    "mode": "HOTL"
+  },
+  "persistence_layer": {
+    "memory_type": "session",
+    "retention": "session-only"
+  },
+  "scaffolding_inventory": {
+    "mcp_used": true,
+    "sandbox_type": "ephemeral"
+  }
+}
+

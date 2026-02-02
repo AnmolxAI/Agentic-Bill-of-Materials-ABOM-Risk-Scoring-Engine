@@ -1,0 +1,21 @@
+{
+  "model_core": {
+    "architecture": "Transformer",
+    "parameters": "7.2e10",
+    "training_flops": "1.1e25"
+  },
+  "agency_profile": {
+    "tools": ["search", "write_file", "exec_code"],
+    "scope": "state-changing"
+  },
+  "autonomy_leash": "HOOTL",
+  "persistence_layer": {
+    "memory_type": "long-term",
+    "retention": "cross-session"
+  },
+  "scaffolding_inventory": {
+    "orchestrator": "MCP",
+    "sandboxed": true
+  }
+}
+

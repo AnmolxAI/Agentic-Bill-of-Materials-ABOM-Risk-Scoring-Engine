@@ -1,0 +1,27 @@
+{
+  "model_core": {
+    "architecture": "Transformer",
+    "flops": 2.0e25
+  },
+  "agency_profile": {
+    "tools": [
+      {"name": "Database", "permission": "write"},
+      {"name": "Network", "permission": "write"},
+      {"name": "System", "permission": "exec"},
+      {"name": "FileSystem", "permission": "write"}
+    ],
+    "scope": "state-changing"
+  },
+  "autonomy_leash": {
+    "mode": "HOOTL"
+  },
+  "persistence_layer": {
+    "memory_type": "vector-db",
+    "retention": "permanent"
+  },
+  "scaffolding_inventory": {
+    "mcp_used": true,
+    "sandbox_type": "persistent"
+  }
+}
+

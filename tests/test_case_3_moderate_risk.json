@@ -1,0 +1,24 @@
+{
+  "model_core": {
+    "architecture": "Transformer",
+    "flops": 1.5e23
+  },
+  "agency_profile": {
+    "tools": [
+      {"name": "Email", "permission": "write"},
+      {"name": "Filesystem", "permission": "read"}
+    ]
+  },
+  "autonomy_leash": {
+    "mode": "HOOTL"
+  },
+  "persistence_layer": {
+    "memory_type": "session",
+    "retention": "session-only"
+  },
+  "scaffolding_inventory": {
+    "mcp_used": true,
+    "sandbox_type": "ephemeral"
+  }
+}
+
