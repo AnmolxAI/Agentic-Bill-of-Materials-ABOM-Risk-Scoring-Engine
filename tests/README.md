@@ -2,6 +2,8 @@
 
 This directory contains 5 comprehensive test cases that validate the risk scoring engine across different risk scenarios and UART tiers.
 
+**Note on Calibration:** The tier thresholds, formula weights, and scalar values used in these test cases are for illustration purposes. A calibration process with domain experts would refine these based on empirical risk data and regulatory alignment across jurisdictions. The UART scheme is designed to be harmonized across different regulatory frameworks to ensure consistent tier outcomes.
+
 ## Test Cases Overview
 
 ### Test Case 1: Minimal Risk (Tier 0)
